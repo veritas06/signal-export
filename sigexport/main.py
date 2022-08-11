@@ -508,8 +508,14 @@ def main(
         convos, contacts = data["convos"], data["contacts"]
     else:
         from .data import fetch_data
+
         convos, contacts = fetch_data(
-            db_file, key, manual=manual, chats=chats, include_empty=include_empty
+            db_file,
+            key,
+            manual=manual,
+            chats=chats,
+            include_empty=include_empty,
+            log=log,
         )
 
     if print_data:
