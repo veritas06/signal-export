@@ -503,9 +503,29 @@ def main(
 
     if use_docker:
         cmd = ["docker", "run", "--rm", f"--volume={src}:/Signal", docker_image]
-        p = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        data = json.loads(p.stdout)
-        convos, contacts = data["convos"], data["contacts"]
+        try:
+            p = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            data = json.loads(p.stdout)
+            convos, contacts = data["convos"], data["contacts"]
+        except FileNotFoundError:
+            secho("Error: using Docker method, but is Docker installed?", fg=colors.RED)
+            secho("Try running this from the command line:\ndocker run hello-world")
+            raise Exit(1)
+        except subprocess.CalledProcessError as e:
+            secho(f"Docker process failed, see logs below:\n{e}", gf=colors.RED)
+            raise Exit(1)
+        except subprocess.TimeoutExpired:
+            secho("Docker process timed out.")
+            raise Exit(1)
+        except json.JSONDecodeError:
+            secho("Unable to decode data from Docker, see logs below:", gf=colors.RED)
+            secho(p.stdout)
+            secho(p.stderr, gf=colors.RED)
+            raise Exit(1)
+        except (KeyError, TypeError):
+            secho("Unable to extract convos and contacts from Docker, see data below", gf=colors.RED)
+            secho(data)
+            raise Exit(1)
     else:
         from .data import fetch_data
 
@@ -526,7 +546,7 @@ def main(
     if list_chats:
         names = sorted(v["name"] for v in contacts.values() if v["name"] is not None)
         secho(" | ".join(names))
-        raise Exit(code=1)
+        raise Exit()
 
     dest = Path(dest).expanduser()
     if not dest.is_dir() or overwrite:
@@ -536,7 +556,7 @@ def main(
             f"Output folder '{dest}' already exists, didn't do anything!", fg=colors.RED
         )
         secho("Use --overwrite (or -o) to ignore existing directory.", fg=colors.RED)
-        raise Exit(code=1)
+        raise Exit()
 
     contacts = fix_names(contacts)
 
