@@ -7,7 +7,7 @@ from typing import Tuple
 from pysqlcipher3 import dbapi2 as sqlcipher
 from typer import secho
 
-from .models import Convos, Contacts
+from .models import Contacts, Convos
 
 
 def fetch_data(

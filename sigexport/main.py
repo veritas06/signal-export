@@ -486,7 +486,7 @@ def main(
 
     # Read sqlcipher key from Signal config file
     if source.is_file():
-        with open(source, "r") as conf:
+        with open(source) as conf:
             key = json.loads(conf.read())["key"]
     else:
         secho(f"Error: {source} not found in directory {src}")
@@ -502,7 +502,10 @@ def main(
             use_docker = True
 
     if use_docker:
-        secho("Using Docker to extract data, this may take a while the first time!", fg=colors.BLUE)
+        secho(
+            "Using Docker to extract data, this may take a while the first time!",
+            fg=colors.BLUE,
+        )
         cmd = ["docker", "run", "--rm", f"--volume={src}:/Signal", docker_image]
         try:
             p = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -524,7 +527,10 @@ def main(
             secho(p.stderr, gf=colors.RED)
             raise Exit(1)
         except (KeyError, TypeError):
-            secho("Unable to extract convos and contacts from Docker, see data below", gf=colors.RED)
+            secho(
+                "Unable to extract convos and contacts from Docker, see data below",
+                gf=colors.RED,
+            )
             secho(data)
             raise Exit(1)
     else:

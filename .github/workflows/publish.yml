@@ -3,6 +3,8 @@ name: publish
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'sigexport/__init__.py'
 
 jobs:
   publish:
