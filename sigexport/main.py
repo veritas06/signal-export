@@ -502,6 +502,7 @@ def main(
             use_docker = True
 
     if use_docker:
+        secho("Using Docker to extract data, this may take a while the first time!", fg=colors.BLUE)
         cmd = ["docker", "run", "--rm", f"--volume={src}:/Signal", docker_image]
         try:
             p = subprocess.run(cmd, capture_output=True, text=True, check=True)
