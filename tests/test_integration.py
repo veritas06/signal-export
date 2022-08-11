@@ -134,6 +134,9 @@ def test_integration():
         include_empty=False,
         manual=False,
         verbose=True,
+        use_docker=False,
+        docker_image="",
+        print_data=False,
     )
 
     output_test = dest / "Test"
