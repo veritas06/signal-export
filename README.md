@@ -1,12 +1,11 @@
 # signal-export
-
 [![docker-build](https://github.com/carderne/signal-export/actions/workflows/docker-build.yml/badge.svg)](https://github.com/carderne/signal-export/actions/workflows/docker-build.yml)
 
 Export chats from the [Signal](https://www.signal.org/) [Desktop app](https://www.signal.org/download/) to Markdown and HTML files with attachments. Each chat is exported as an individual .md/.html file and the attachments for each are stored in a separate folder. Attachments are linked from the Markdown files and displayed in the HTML (pictures, videos, voice notes).
 
 Currently this seems to be the only way to get chat history out of Signal!
 
-Adapted from https://github.com/mattsta/signal-backup, which I suspect will be hard to get working now.
+Adapted from [mattsta/signal-backup](https://github.com/mattsta/signal-backup), which I suspect will be hard to get working now.
 
 ## Example
 An export for a group conversation looks as follows:
@@ -20,13 +19,13 @@ Images are attached inline with `![name](path)` while other attachments (voice n
 
 This is converted to HTML at the end so it can be opened with any web browser. The stylesheet `.css` is still very basic but I'll get to it sooner or later.
 
-## Installation
-### 🚀 Easy mode with Docker
+## 🚀 Installation with Docker
 This tool has some pretty difficult dependencies, so it's easier to get some help from Docker.
 For most people this will probably be the easiest way.
 It requires installing Docker and then pulling a 200MB image, so avoid this if data use is a concern.
 
 First off, [install Docker](https://docs.docker.com/get-docker/).
+And make sure you have Python installed.
 
 Then install this package:
 ```bash
@@ -77,28 +76,14 @@ _Nothing will be overwritten!_
 It will put the combined results in whatever output directory you specified and leave your previos export untouched.
 Exercise is left to the reader to verify that all went well before deleting the previous one.
 
-## Alternative installation methods
-### 🦆 Slightly harder: build your own Docker image
-You can always build your own Docker image if you prefer that.
-Just clone this repository and build it.
-```bash
-git clone https://github.com/carderne/signal-export.git
-cd signal-export
-docker build -t sigexport .
-```
-
-Then you can run the script using your own Docker image:
-```bash
-sigexport --use-docker --docker-image=sigexport ~/signal-chats
-```
-
-### 🌋 Hard mode: install the full dependencies
-This involves actually installing the stuff into your system, but has proven hard to get work for many, especially on Windows.
+## Alternative installation method
+🌋 This is hard mode, and involves installing more stuff.
+Probably easy on macOS, slightly involved on Linux, and impossible on Windows.
 
 Before you can install `signal-export`, you need to get `sqlcipher` working.
 Follow the instructions for your OS:
 
-#### For Ubuntu (other distros can adapt to their package manager)
+### Ubuntu (other distros can adapt to their package manager)
 Install the required libraries.
 ```bash
 sudo apt install libsqlite3-dev tclsh libssl-dev
@@ -112,15 +97,13 @@ cd sqlcipher
 make && sudo make install
 ```
 
-NOTE: If you instead install sqlcipher via your distro's package manager, make sure the version is sufficient. 4.0.1 is known to be too old, 4.5.0 is known to work. Old versions will spit out errors such as "malformed database schema (messages) - near "AS": syntax error". See [issue 26](https://github.com/carderne/signal-export/issues/26).
-
-#### For MacOS
+### macOS
 - Install [Homebrew](https://brew.sh).
 - Run `brew install openssl sqlcipher`
 
-#### For Windows
-YMMV, but apparently Ubuntu 20.04 on WSL2 should work!
-That is, install WSL2 and Ubuntu 20.04 on Windows, and then follow the **For Linux** instructions and feel your way forward.
+### Windows
+Ubuntu on WSL2 should work!
+That is, install WSL2 and Ubuntu on Windows, and then follow the **For Linux** instructions and feel your way forward.
 But probably just give up here and use the Docker method instead.
 
 ### Install signal-export
@@ -147,4 +130,5 @@ tox
 ```
 
 ## Similar things
-[signal-backup-decode](https://github.com/pajowu/signal-backup-decode) might be easier if you use Android!
+- [signal-backup-decode](https://github.com/pajowu/signal-backup-decode) might be easier if you use Android!
+- [signal2html](https://github.com/GjjvdBurg/signal2html) also Android only
