@@ -379,7 +379,14 @@ def lines_to_msgs(lines: List[str]) -> List[List[str]]:
 def merge_attachments(media_new: Path, media_old: Path) -> None:
     for f in media_old.iterdir():
         if f.is_file():
-            shutil.copy2(f, media_new)
+            try:
+                shutil.copy2(f, media_new)
+            except shutil.SameFileError:
+                if log:
+                    secho(
+                        f"Skipped file {f} as duplicate found in new export directory!",
+                        fg=colors.RED,
+                    )
 
 
 def merge_chat(path_new: Path, path_old: Path) -> None:
