@@ -425,7 +425,7 @@ def merge_with_old(dest: Path, old: Path) -> None:
             name = dir_old.stem
             if log:
                 secho(f"\tMerging {name}")
-            dir_new = old / name
+            dir_new = dest / name
             if dir_new.is_dir():
                 merge_attachments(dir_new / "media", dir_old / "media")
                 path_new = dir_new / "index.md"
