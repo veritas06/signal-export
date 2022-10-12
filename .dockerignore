@@ -3,6 +3,7 @@ build
 .github
 .gitignore
 helper.sh
+Makefile
 .mypy_cache
 .pre-commit-config.yaml
 __pycache__/

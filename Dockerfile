@@ -21,6 +21,6 @@ RUN pip3 install \
     pysqlcipher3==1.1.0
 
 COPY . signal-export/
-RUN pip3 install ./signal-export/
+RUN pip install ./signal-export/
 
 ENTRYPOINT ["sigexport", "--source=/Signal", "--print-data"]

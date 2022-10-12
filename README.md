@@ -108,9 +108,9 @@ But probably just give up here and use the Docker method instead.
 
 ### Install signal-export
 Then you're ready to install signal-export:
-(Note the `[all]` that has been added!)
+(Note the `[sql]` that has been added!)
 ```bash
-pip install signal-export[all]
+pip install signal-export[sql]
 ```
 
 Then you should be able to use the [Usage instructions](#usage) as above.
@@ -119,14 +119,18 @@ Then you should be able to use the [Usage instructions](#usage) as above.
 ```bash
 git clone https://github.com/carderne/signal-export.git
 cd signal-export
-pip install -e .[dev]
+pip install -e .[dev,sqlcipher]
 pre-commit install
 ```
 
 Run tests with:
 ```bash
-pytest --cov=sigexport --cov-report=term-missing tests/
-tox
+make test
+```
+
+And check types with:
+```bash
+mypy sigexport/
 ```
 
 ## Similar things

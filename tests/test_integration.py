@@ -1,9 +1,15 @@
+import os
 import shutil
+import time
 from pathlib import Path
 
-expected_md = """[2022-08-10 15:33] Me: Test message  
-[2022-08-10 15:33] Me: Test image  ![2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg](./media/2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg)  
-[2022-08-10 15:34] Me:   [2022-08-10T15-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a](./media/2022-08-10T15-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a)  
+os.environ["TZ"] = "UTC"
+
+time.tzset()
+
+expected_md = """[2022-08-10 19:33] Me: Test message  
+[2022-08-10 19:33] Me: Test image  ![2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg](./media/2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg)  
+[2022-08-10 19:34] Me:   [2022-08-10T19-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a](./media/2022-08-10T19-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a)  
 """  # noqa
 
 expected_html = """<!DOCTYPE html>
@@ -40,7 +46,7 @@ expected_html = """<!DOCTYPE html>
                     2022-08-10
                 </span>
                 <span class="time">
-                    15:33
+                    19:33
                 </span>
                 <span class="sender">
                     Me
@@ -58,7 +64,7 @@ expected_html = """<!DOCTYPE html>
                     2022-08-10
                 </span>
                 <span class="time">
-                    15:33
+                    19:33
                 </span>
                 <span class="sender">
                     Me
@@ -67,14 +73,14 @@ expected_html = """<!DOCTYPE html>
                     <p>
                         Test image
                         <figure>
-                            <label for="2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg">
-                                <img alt="2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg" load="lazy" src="./media/2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg"/>
+                            <label for="2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg">
+                                <img alt="2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg" load="lazy" src="./media/2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg"/>
                             </label>
-                            <input class="modal-state" id="2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg" type="checkbox"/>
+                            <input class="modal-state" id="2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg" type="checkbox"/>
                             <div class="modal">
-                                <label for="2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg">
+                                <label for="2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg">
                                     <div class="modal-content">
-                                        <img alt="2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg" class="modal-photo" loading="lazy" src="./media/2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg"/>
+                                        <img alt="2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg" class="modal-photo" loading="lazy" src="./media/2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg"/>
                                     </div>
                                 </label>
                             </div>
@@ -89,7 +95,7 @@ expected_html = """<!DOCTYPE html>
                     2022-08-10
                 </span>
                 <span class="time">
-                    15:34
+                    19:34
                 </span>
                 <span class="sender">
                     Me
@@ -97,7 +103,7 @@ expected_html = """<!DOCTYPE html>
                 <span class="body">
                     <p>
                         <audio controls="">
-                            <source src="./media/2022-08-10T15-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a" type="audio/mp4"/>
+                            <source src="./media/2022-08-10T19-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a" type="audio/mp4"/>
                         </audio>
                     </p>
                 </span>
@@ -144,14 +150,20 @@ def test_integration():
     output_md = (output_test / "index.md").read_text()
     output_html = (output_test / "index.html").read_text()
 
+    print()
+    print()
+    print(output_md)
+    print()
+    print()
+
     assert expected_md == output_md
     assert expected_html == output_html
 
     assert (
-        output_media / "2022-08-10T15-33-48.638_00_signal-2022-08-10-153348.jpeg"
+        output_media / "2022-08-10T19-33-48.638_00_signal-2022-08-10-153348.jpeg"
     ).is_file()
     assert (
-        output_media / "2022-08-10T15-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a"
+        output_media / "2022-08-10T19-34-11.986_00_Voice_Message_10-08-2022_15-34.m4a"
     ).is_file()
 
     shutil.rmtree(dest)
