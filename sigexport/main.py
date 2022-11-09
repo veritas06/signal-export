@@ -576,7 +576,10 @@ def main(
 
     secho("Copying and renaming attachments")
     for att_src, att_dst in copy_attachments(src, dest, convos, contacts):
-        shutil.copy2(att_src, att_dst)
+        try:
+            shutil.copy2(att_src, att_dst)
+        except FileNotFoundError:
+            secho(f"No file to copy at {att_src}, skipping!", fg=colors.MAGENTA)
 
     secho("Creating markdown files")
     for md_path, md_text in create_markdown(dest, convos, contacts, quote):
