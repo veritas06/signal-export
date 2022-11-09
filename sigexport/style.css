@@ -25,11 +25,11 @@ body {
 }
 
 .prev {
-    top: 40%;
+    top: 20%;
 }
 
 .next {
-    bottom: 40%;
+    bottom: 20%;
 }
 
 .last {
