@@ -18,6 +18,8 @@ from .models import Contacts, Convos
 
 log = False
 
+DATA_DELIM = "-----DATA-----"
+
 
 def source_location() -> Path:
     """Get OS-dependent source location."""
@@ -514,9 +516,21 @@ def main(
             fg=colors.BLUE,
         )
         cmd = ["docker", "run", "--rm", f"--volume={src}:/Signal", docker_image]
+        if manual:
+            cmd.append("--manual")
+        if chats:
+            cmd.append(f"--chats={chats}")
+        if include_empty:
+            cmd.append("--include-empty")
+        if verbose:
+            cmd.append("--verbose")
         try:
             p = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            data = json.loads(p.stdout)
+            docker_logs_1, data_raw, docker_logs_2 = p.stdout.split(DATA_DELIM)
+            data = json.loads(data_raw)
+            if log:
+                secho(docker_logs_1)
+                secho(docker_logs_2)
             convos, contacts = data["convos"], data["contacts"]
         except FileNotFoundError:
             secho("Error: using Docker method, but is Docker installed?", fg=colors.RED)
@@ -554,7 +568,7 @@ def main(
 
     if print_data:
         data = {"convos": convos, "contacts": contacts}
-        print(json.dumps(data))
+        print(DATA_DELIM, json.dumps(data), DATA_DELIM)
         raise Exit()
 
     if list_chats:

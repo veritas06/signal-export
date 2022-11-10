@@ -2,7 +2,7 @@ import json
 import os
 import sqlite3
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
 from pysqlcipher3 import dbapi2 as sqlcipher
 from typer import secho
@@ -14,7 +14,7 @@ def fetch_data(
     db_file: Path,
     key: str,
     manual: bool = False,
-    chats: str = None,
+    chats: Optional[str] = None,
     include_empty: bool = False,
     log: bool = False,
 ) -> Tuple[Convos, Contacts]:
