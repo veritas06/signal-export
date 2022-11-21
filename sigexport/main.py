@@ -487,7 +487,7 @@ def main(
         raise Exit(code=1)
 
     if source:
-        src = Path(source).absolute()
+        src = Path(source).expanduser().absolute()
     else:
         src = source_location()
     source = src / "config.json"
