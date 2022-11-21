@@ -1,1 +1,2 @@
-__version__ = "1.3.1"
+import pkg_resources
+__version__ = pkg_resources.get_distribution("signal-export").version

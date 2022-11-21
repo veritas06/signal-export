@@ -13,13 +13,19 @@ import markdown
 from bs4 import BeautifulSoup
 from typer import Argument, Exit, Option, colors, run, secho
 
-from . import templates
-from .models import Contacts, Convos
+from sigexport import templates
+from sigexport.models import Contacts, Convos
+from sigexport import __version__
 
 log = False
 
 DATA_DELIM = "-----DATA-----"
 
+
+def version_callback(value: bool) -> None:
+    if value:
+        print(f"v{__version__}")
+        raise Exit()
 
 def source_location() -> Path:
     """Get OS-dependent source location."""
@@ -474,6 +480,9 @@ def main(
     print_data: bool = Option(
         False, help="Print extracted DB data and exit (for use by Docker container)"
     ),
+    version: Optional[bool] = Option(
+        None, "--version", callback=version_callback
+    ),
 ):
     """
     Read the Signal directory and output attachments and chat files to DEST directory.
@@ -555,7 +564,7 @@ def main(
             secho(data)
             raise Exit(1)
     else:
-        from .data import fetch_data
+        from sigexport.data import fetch_data
 
         convos, contacts = fetch_data(
             db_file,
