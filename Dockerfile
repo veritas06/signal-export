@@ -20,7 +20,8 @@ RUN pip3 install \
     Markdown==3.4.1 \
     pysqlcipher3==1.1.0
 
-COPY . signal-export/
-RUN pip install ./signal-export/
+WORKDIR app
+COPY . .
+RUN --mount=source=.git,target=.git,type=bind pip install --no-cache-dir -e .
 
 ENTRYPOINT ["sigexport", "--source=/Signal", "--print-data"]
