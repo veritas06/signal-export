@@ -16,25 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: carderne/sigexport:latest
-          options: -v ${{ github.workspace }}:/fresh
-          run: |
-            cd /fresh
-            pip install . pytest pytest-cov
-            pytest --cov sigexport
-
-  docker-push:
-    needs: test
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -63,6 +45,28 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
             --tag "carderne/sigexport:$TAG" \
-            --cache-from "carderne/sigexport" \
+            --tag "carderne/sigexport:latest" \
+            --cache-from "carderne/sigexport:latest" \
             --cache-to type=inline \
             .
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set tag env var
+        run: echo "TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: "carderne/sigexport:${{ env.TAG }}"
+          options: -v ${{ github.workspace }}:/fresh
+          run: |
+            cd /fresh
+            pip install . pytest pytest-cov
+            pytest --cov sigexport
+

@@ -8,4 +8,4 @@ build:
 
 .PHONY: test
 test: build
-	docker run --rm --entrypoint='' -v $(DIR):/fresh carderne/sigexport:latest bash -c 'cd /fresh && pip install . pytest pytest-cov && pytest --cov=sigexport'
+	docker run --rm --entrypoint='' -v $(DIR):/fresh sigexport:latest bash -c 'cd /fresh && pip install . pytest pytest-cov && pytest --cov=sigexport'
