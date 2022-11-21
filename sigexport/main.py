@@ -476,7 +476,7 @@ def main(
     use_docker: bool = Option(
         False, help="Use Docker container for SQLCipher extraction"
     ),
-    docker_image: str = Option("carderne/sigexport:latest", help="Docker image to use"),
+    docker_image: str = Option(None, help="Docker image to use"),
     print_data: bool = Option(
         False, help="Print extracted DB data and exit (for use by Docker container)"
     ),
@@ -520,6 +520,8 @@ def main(
             use_docker = True
 
     if use_docker:
+        if not docker_image:
+            docker_image = f"carderne/sigexport:v{__version__}"
         secho(
             "Using Docker to extract data, this may take a while the first time!",
             fg=colors.BLUE,
