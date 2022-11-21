@@ -521,7 +521,8 @@ def main(
 
     if use_docker:
         if not docker_image:
-            docker_image = f"carderne/sigexport:v{__version__}"
+            docker_version = __version__.split(".dev")[0]
+            docker_image = f"carderne/sigexport:v{docker_version}"
         secho(
             "Using Docker to extract data, this may take a while the first time!",
             fg=colors.BLUE,
