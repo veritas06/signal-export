@@ -77,7 +77,33 @@ _Nothing will be overwritten!_
 It will put the combined results in whatever output directory you specified and leave your previos export untouched.
 Exercise is left to the reader to verify that all went well before deleting the previous one.
 
-## Alternative installation method
+## Usage without Python
+I don't recommend this, and you will have issues with file-ownership and other stuff.
+You can also run the Docker image directly, it just requires copy-pasting a much-longer command and being careful with volume mounts.
+
+First set the appropriate environment variables for your OS:
+```bash
+# Only enter one of these!
+SIGNAL_INPUT="$HOME/.config/Signal"                     # Linux
+SIGNAL_INPUT="$HOME/Library/Application Support/Signal" # macOS
+SIGNAL_INPUT="$HOME/AppData/Roaming/Signal"             # Powershell
+
+# And your output location (must be an absolute path)
+SIGNAL_OUTPUT="$HOME/Downloads/signal-output"
+```
+
+Then run the below command, which pulls in the environment variables you set above.
+```bash
+# Note that the --overwrite flag is necessary when running like this, careful where you point it!
+docker run --rm \
+  -v "$SIGNAL_INPUT:/Signal" \
+  -v "$SIGNAL_OUTPUT:/output" \
+    carderne/sigexport:latest \
+    --overwrite /output \         # this line is obligatory!
+    --chats Jim                   # this line isn't
+```
+
+## Usage without Docker!
 🌋 This is hard mode, and involves installing more stuff.
 Probably easy on macOS, slightly involved on Linux, and impossible on Windows.
 

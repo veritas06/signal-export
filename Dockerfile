@@ -24,4 +24,5 @@ WORKDIR app
 COPY . .
 RUN --mount=source=.git,target=.git,type=bind pip install --no-cache-dir .
 
-ENTRYPOINT ["sigexport", "--source=/Signal", "--print-data"]
+ENTRYPOINT ["sigexport", "--source=/Signal"]
+CMD ["--print-data"]
