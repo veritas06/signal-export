@@ -94,7 +94,8 @@ SIGNAL_OUTPUT="$HOME/Downloads/signal-output"
 
 Then run the below command, which pulls in the environment variables you set above.
 ```bash
-# Note that the --overwrite flag is necessary when running like this, careful where you point it!
+# Note that the --overwrite flag is necessary when running like this
+# careful where you point it!
 docker run --rm \
   -v "$SIGNAL_INPUT:/Signal" \
   -v "$SIGNAL_OUTPUT:/output" \
