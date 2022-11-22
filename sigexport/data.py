@@ -4,7 +4,7 @@ import sqlite3
 from pathlib import Path
 from typing import Optional, Tuple
 
-from pysqlcipher3 import dbapi2 as sqlcipher
+from pysqlcipher3 import dbapi2 as sqlcipher  # type: ignore[import]
 from typer import secho
 
 from .models import Contacts, Convos

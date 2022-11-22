@@ -10,12 +10,11 @@ from typing import Iterable, List, Optional, Tuple
 
 import emoji
 import markdown
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # type: ignore[import]
 from typer import Argument, Exit, Option, colors, run, secho
 
-from sigexport import templates
+from sigexport import __version__, templates
 from sigexport.models import Contacts, Convos
-from sigexport import __version__
 
 log = False
 
@@ -26,6 +25,7 @@ def version_callback(value: bool) -> None:
     if value:
         print(f"v{__version__}")
         raise Exit()
+
 
 def source_location() -> Path:
     """Get OS-dependent source location."""
@@ -59,7 +59,7 @@ def copy_attachments(
         if log:
             secho(f"\tCopying attachments for: {name}")
         # some contact names are None
-        if name is None:
+        if not name:
             name = "None"
         contact_path = dest / name / "media"
         contact_path.mkdir(exist_ok=True, parents=True)
@@ -122,7 +122,7 @@ def create_markdown(
             secho(f"\tDoing markdown for: {name}")
         is_group = contacts[key]["is_group"]
         # some contact names are None
-        if name is None:
+        if not name:
             name = "None"
         md_path = dest / name / "index.md"
         with md_path.open("w") as _:
@@ -155,7 +155,7 @@ def create_markdown(
                 if log:
                     secho(f"\t\tNo body:\t\t{date}")
                 body = ""
-            if body is None:
+            if not body:
                 body = ""
             body = body.replace("`", "")  # stop md code sections forming
             body += "  "  # so that markdown newlines
@@ -480,10 +480,8 @@ def main(
     print_data: bool = Option(
         False, help="Print extracted DB data and exit (for use by Docker container)"
     ),
-    version: Optional[bool] = Option(
-        None, "--version", callback=version_callback
-    ),
-):
+    version: Optional[bool] = Option(None, "--version", callback=version_callback),
+) -> None:
     """
     Read the Signal directory and output attachments and chat files to DEST directory.
     """
@@ -515,7 +513,7 @@ def main(
 
     if not use_docker:
         try:
-            from pysqlcipher3 import dbapi2 as _  # noqa
+            from pysqlcipher3 import dbapi2 as _  # type: ignore[import] # noqa
         except Exception:
             use_docker = True
 
@@ -625,7 +623,7 @@ def main(
     secho("Done!", fg=colors.GREEN)
 
 
-def cli():
+def cli() -> None:
     run(main)
 
 
