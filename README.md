@@ -40,8 +40,6 @@ sigexport ~/signal-chats
 # output will be saved to the supplied directory
 ```
 
-See [Alternative installation methods](#alternative-installation-methods) below for other ways to get it working.
-
 ## Usage
 Please fully exit your Signal app before proceeding, otherwise you will likely encounter an `I/O disk` error, due to the message database being made read-only, as it was being accessed by the app.
 
@@ -77,7 +75,7 @@ _Nothing will be overwritten!_
 It will put the combined results in whatever output directory you specified and leave your previos export untouched.
 Exercise is left to the reader to verify that all went well before deleting the previous one.
 
-## Usage without Python
+## 🗻 No-Python install
 I don't recommend this, and you will have issues with file-ownership and other stuff.
 You can also run the Docker image directly, it just requires copy-pasting a much-longer command and being careful with volume mounts.
 
@@ -104,8 +102,33 @@ docker run --rm \
     --chats Jim                   # this line isn't
 ```
 
-## Usage without Docker!
-🌋 This is hard mode, and involves installing more stuff.
+## 🗻 BYOD (Build-Your-Own-Docker) image
+Running this script using the methods above requires you to trust that I haven't snuck anything into the Docker image.
+You can inspect the code in this repo, and after `pip install`ing, you can confirm that the code installed on your computer matches this repo.
+But the methods above rely on the [Docker image](https://hub.docker.com/r/carderne/sigexport), which is a bit more complex.
+
+You can check the [Dockerfile](./Dockerfile) in this repo, and the [GitHub Actions workflow](./.github/workflows/cicd.yaml).
+You can check that the last [Actions run](https://github.com/carderne/signal-export/actions) matches the time on the last push to the DockerHub registry.
+But you can't guarantee that I didn't sneak something in, so the next thing is to check the image itself.
+
+So you can run `docker inspect carderne/sigexport` and check the `Entrypoint` and `Cmd` values.
+Then you can run `docker run --rm -it --entrypoint='' carderne/sigexport bash` and check what Entrypoint/Cmd values correspond to inside the container, and check that _that_ matches the repo!
+
+You can also just build your own Docker image from this repo:
+```bash
+git clone https://github.com/carderne/signal-export.git
+cd signal-export
+docker build -t yourname/sigexport .
+```
+
+And _then_ run the Python script, but tell it to use the image you just created:
+```bash
+sigexport --docker-image yourname/sigexport outputdir/
+```
+
+
+## 🌋 No-Docker install
+This is hard mode, and involves installing more stuff.
 Probably easy on macOS, slightly involved on Linux, and impossible on Windows.
 
 Before you can install `signal-export`, you need to get `sqlcipher` working.
