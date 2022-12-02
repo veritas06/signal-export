@@ -40,6 +40,11 @@ sigexport ~/signal-chats
 # output will be saved to the supplied directory
 ```
 
+**NB** On Windows/PowerShell, you may get an error like `term 'sigexport' is not recognized`, in which case you can use the following:
+```bash
+python -m sigexport.main ~/signal-chats
+```
+
 ## Usage
 Please fully exit your Signal app before proceeding, otherwise you will likely encounter an `I/O disk` error, due to the message database being made read-only, as it was being accessed by the app.
 
