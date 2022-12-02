@@ -38,12 +38,11 @@ dependencies = [
 dev = [
     "black",
     "build",
-    "flake8",
-    "isort",
     "mypy",
     "pre-commit",
     "pytest",
     "pytest-cov",
+    "ruff",
     "setuptools-scm",
     "twine",
     "types-Markdown",
@@ -71,8 +70,32 @@ sigexport = "sigexport.main:cli"
 
 [tool.black]
 line-length = 88
-include = '\.pyi?$'
-exclude = ".git,.hg,.mypy_cache,.tox,.venv,_build,buck-out,build,dist"
+
+[tool.ruff]
+target-version = "py36"
+
+select = [
+    "F",
+    "E",
+    "I",
+    #"D",
+    "U",
+    #"N",
+    "E",
+    #"S",
+    #"C",
+    #"FBT",
+    #"B",
+    #"A",
+    #"T",
+    "Q",
+    #"ANN",
+    #"BLE"
+]
+src = ["sigexport"]
+
+[tool.ruff.isort]
+known-first-party = ["sigexport"]
 
 [tool.mypy]
 show_error_codes = true
@@ -85,7 +108,3 @@ check_untyped_defs = true
 warn_return_any = true
 warn_unused_ignores = true
 warn_unreachable = true
-
-[tool.isort]
-profile = "black"
-skip = ".tox,.eggs,ci/templates,build,dist"
