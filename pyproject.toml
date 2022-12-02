@@ -11,7 +11,7 @@ name = "signal-export"
 description = "Export Signal conversations to Markdown and HTML"
 readme = "README.md"
 license = {text = "BSD 3-Clause License"}
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 keywords = ["backup", "chat", "export"]
 
 authors = [
@@ -72,7 +72,7 @@ sigexport = "sigexport.main:cli"
 line-length = 88
 
 [tool.ruff]
-target-version = "py36"
+target-version = "py38"
 
 select = [
     "F",
