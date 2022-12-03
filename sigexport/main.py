@@ -1,3 +1,5 @@
+"""Main script for sigexport."""
+
 import json
 import os
 import re
@@ -22,6 +24,7 @@ DATA_DELIM = "-----DATA-----"
 
 
 def version_callback(value: bool) -> None:
+    """Get sigexport version."""
     if value:
         print(f"v{__version__}")
         raise Exit()
@@ -29,7 +32,6 @@ def version_callback(value: bool) -> None:
 
 def source_location() -> Path:
     """Get OS-dependent source location."""
-
     home = Path.home()
     paths = {
         "linux": home / ".config/Signal",
@@ -50,7 +52,6 @@ def copy_attachments(
     src: Path, dest: Path, convos: Convos, contacts: Contacts
 ) -> Iterable[Tuple[Path, Path]]:
     """Copy attachments and reorganise in destination directory."""
-
     src_att = Path(src) / "attachments.noindex"
     dest = Path(dest)
 
@@ -107,6 +108,7 @@ def copy_attachments(
 
 
 def timestamp_format(ts: float) -> str:
+    """Format timestamp as 2000-01-01 00:00."""
     return datetime.fromtimestamp(ts / 1000.0).strftime("%Y-%m-%d %H:%M")
 
 
@@ -114,7 +116,6 @@ def create_markdown(
     dest: Path, convos: Convos, contacts: Contacts, add_quote: bool = False
 ) -> Iterable[Tuple[Path, str]]:
     """Output each conversation into a simple text file."""
-
     dest = Path(dest)
     for key, messages in convos.items():
         name = contacts[key]["name"]
@@ -249,6 +250,7 @@ def fix_names(contacts: Contacts) -> Contacts:
 
 
 def create_html(dest: Path, msgs_per_page: int = 100) -> Iterable[Tuple[Path, str]]:
+    """Create HTML version from Markdown input."""
     root = Path(__file__).resolve().parents[0]
     css_source = root / "style.css"
     css_dest = dest / "style.css"
@@ -373,6 +375,7 @@ def create_html(dest: Path, msgs_per_page: int = 100) -> Iterable[Tuple[Path, st
 
 
 def lines_to_msgs(lines: List[str]) -> List[List[str]]:
+    """Extract messages from lines of Markdown."""
     p = re.compile(r"^(\[\d{4}-\d{2}-\d{2},{0,1} \d{2}:\d{2}\])(.*?:)(.*\n)")
     msgs = []
     for li in lines:
@@ -385,6 +388,7 @@ def lines_to_msgs(lines: List[str]) -> List[List[str]]:
 
 
 def merge_attachments(media_new: Path, media_old: Path) -> None:
+    """Merge new and old attachments directories."""
     for f in media_old.iterdir():
         if f.is_file():
             try:
@@ -398,6 +402,7 @@ def merge_attachments(media_new: Path, media_old: Path) -> None:
 
 
 def merge_chat(path_new: Path, path_old: Path) -> None:
+    """Merge new and old chat markdowns."""
     with path_old.open(encoding="utf-8") as f:
         old_raw = f.readlines()
     with path_new.open(encoding="utf-8") as f:
@@ -428,6 +433,7 @@ def merge_chat(path_new: Path, path_old: Path) -> None:
 
 
 def merge_with_old(dest: Path, old: Path) -> None:
+    """Main function for merging new and old."""
     for dir_old in old.iterdir():
         if dir_old.is_dir():
             name = dir_old.stem
@@ -482,10 +488,7 @@ def main(
     ),
     version: Optional[bool] = Option(None, "--version", callback=version_callback),
 ) -> None:
-    """
-    Read the Signal directory and output attachments and chat files to DEST directory.
-    """
-
+    """Read the Signal directory and output attachments and chat to DEST directory."""
     global log
     log = verbose
 
@@ -624,6 +627,7 @@ def main(
 
 
 def cli() -> None:
+    """cli."""
     run(main)
 
 

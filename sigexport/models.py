@@ -1,3 +1,5 @@
+"""Package typing."""
+
 from typing import Any, Dict, List
 
 Convo = Dict[str, Any]

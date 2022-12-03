@@ -1,3 +1,5 @@
+"""HTML templates."""
+
 html = """
 <!doctype html>
 <html lang='en'>

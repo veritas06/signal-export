@@ -1,3 +1,5 @@
+"""Extract data from Signal DB."""
+
 import json
 import os
 import sqlite3
@@ -19,7 +21,6 @@ def fetch_data(
     log: bool = False,
 ) -> Tuple[Convos, Contacts]:
     """Load SQLite data into dicts."""
-
     contacts: Contacts = {}
     convos: Convos = {}
     if chats:
