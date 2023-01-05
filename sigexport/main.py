@@ -126,7 +126,7 @@ def create_markdown(
         if not name:
             name = "None"
         md_path = dest / name / "index.md"
-        with md_path.open("w") as _:
+        with md_path.open("w", encoding="utf-8") as _:
             pass  # overwrite file if it exists
 
         for msg in messages:
@@ -505,7 +505,7 @@ def main(
 
     # Read sqlcipher key from Signal config file
     if source.is_file():
-        with open(source) as conf:
+        with open(source, encoding="utf-8") as conf:
             key = json.loads(conf.read())["key"]
     else:
         secho(f"Error: {source} not found in directory {src}")
