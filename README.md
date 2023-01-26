@@ -25,7 +25,7 @@ This tool has some pretty difficult dependencies, so it's easier to get some hel
 For most people this will probably be the easiest way.
 It requires installing Docker and then pulling a [200MB image](https://hub.docker.com/r/carderne/sigexport), so avoid this if data use is a concern.
 
-First off, [install Docker](https://docs.docker.com/get-docker/).
+First off, [install Docker](https://docs.docker.com/get-docker/) (including following the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) for managing Docker as a non-root user).  
 And make sure you have Python installed.
 
 Then install this package:
